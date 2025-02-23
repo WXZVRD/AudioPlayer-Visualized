@@ -22,13 +22,21 @@ export default function AudioVisualizer() {
     const playPause = async () => {
         console.log(isPlaying)
         if (!isPlaying) {
-            await audioRef.current.play();
+
+            const soundPromise = await audioRef.current.play();
+
+            if (soundPromise !== undefined) {
+
+                soundPromise.then(function(_) {
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                });
+            }
         } else {
             await audioRef.current.pause();
         }
         setIsPlaying(!isPlaying);
     };
-
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -38,8 +46,8 @@ export default function AudioVisualizer() {
             setDuration(audio.duration);
         };
 
-        const handleTrackEnd = () => {
-            nextTrack();
+        const handleTrackEnd = async () => {
+            await nextTrack();
         };
 
         audio.addEventListener("timeupdate", updateTime);
