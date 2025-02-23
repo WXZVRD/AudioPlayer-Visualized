@@ -1,13 +1,13 @@
 import { Canvas } from "@react-three/fiber";
-import {useState, useRef, useEffect} from "react";
+import { useState, useRef, useEffect } from "react";
 import SphereVisualizer from "../SphereVisualizer.jsx";
 import tracks from "../../mock/mockTracks.js";
-import styles from './AudioVisualizator.module.css'
+import styles from './AudioVisualizator.module.css';
 
-import leftBtn from '../../assets/img/leftBtn.svg'
-import rigthBtn from '../../assets/img/rightBtn.svg'
-import pauseBtn from '../../assets/img/pause.svg'
-import startBtn from '../../assets/img/play.svg'
+import leftBtn from '../../assets/img/leftBtn.svg';
+import rigthBtn from '../../assets/img/rightBtn.svg';
+import pauseBtn from '../../assets/img/pause.svg';
+import startBtn from '../../assets/img/play.svg';
 import formatTime from "../../utils/formatTime.js";
 import useMousePosition from "../../hook/useMouse.js";
 
@@ -16,66 +16,55 @@ export default function AudioVisualizer() {
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const audioRef = useRef(new Audio(tracks[0].src));
+    const audioRef = useRef(null);
     const position = useMousePosition();
 
-    const playPause = async () => {
-        console.log(isPlaying)
-        if (!isPlaying) {
+    useEffect(() => {
+        audioRef.current = new Audio(tracks[currentTrackIndex].src);
+        audioRef.current.preload = "auto"; е
+        audioRef.current.addEventListener("timeupdate", () => {
+            setCurrentTime(audioRef.current.currentTime);
+            setDuration(audioRef.current.duration || 0);
+        });
 
-            const soundPromise = await audioRef.current.play();
+        audioRef.current.addEventListener("ended", nextTrack);
 
-            if (soundPromise !== undefined) {
+        return () => {
+            audioRef.current.pause();
+            audioRef.current.src = "";
+            audioRef.current.load();
+        };
+    }, []);
 
-                soundPromise.then(function(_) {
-                    audioRef.current.pause();
-                    audioRef.current.currentTime = 0;
-                });
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = tracks[currentTrackIndex].src;
+            audioRef.current.load();
+            if (isPlaying) {
+                audioRef.current.play().catch(err => console.error("Ошибка воспроизведения:", err));
             }
+        }
+    }, [currentTrackIndex]);
+
+    const playPause = async () => {
+        if (!isPlaying) {
+            await audioRef.current.play();
         } else {
             await audioRef.current.pause();
         }
         setIsPlaying(!isPlaying);
     };
 
-    useEffect(() => {
-        const audio = audioRef.current;
-
-        const updateTime = () => {
-            setCurrentTime(audio.currentTime);
-            setDuration(audio.duration);
-        };
-
-        const handleTrackEnd = async () => {
-            await nextTrack();
-        };
-
-        audio.addEventListener("timeupdate", updateTime);
-        audio.addEventListener("ended", handleTrackEnd);
-
-        return () => {
-            audio.removeEventListener("timeupdate", updateTime);
-            audio.removeEventListener("ended", handleTrackEnd);
-        };
-    }, [currentTrackIndex]);
-
-    const nextTrack =  async () => {
-        let nextIndex = (currentTrackIndex + 1) % tracks.length;
-        setCurrentTrackIndex(nextIndex);
-        audioRef.current.src = tracks[nextIndex].src;
-        await audioRef.current.play();
-        setIsPlaying(true);
+    const nextTrack = async () => {
+        setCurrentTrackIndex((currentTrackIndex + 1) % tracks.length);
     };
 
     const prevTrack = async () => {
-        let prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-        setCurrentTrackIndex(prevIndex);
-        audioRef.current.src = tracks[prevIndex].src;
-        await audioRef.current.play();
-        setIsPlaying(true);
+        setCurrentTrackIndex((currentTrackIndex - 1 + tracks.length) % tracks.length);
     };
 
-    return (
+return (
         <>
             <div className={styles.player}>
                 <div
