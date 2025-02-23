@@ -19,15 +19,16 @@ export default function AudioVisualizer() {
     const audioRef = useRef(new Audio(tracks[0].src));
     const position = useMousePosition();
 
-    const playPause = () => {
+    const playPause = async () => {
         console.log(isPlaying)
         if (!isPlaying) {
-            audioRef.current.play();
+            await audioRef.current.play();
         } else {
-            audioRef.current.pause();
+            await audioRef.current.pause();
         }
         setIsPlaying(!isPlaying);
     };
+
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -50,19 +51,19 @@ export default function AudioVisualizer() {
         };
     }, [currentTrackIndex]);
 
-    const nextTrack = () => {
+    const nextTrack =  async () => {
         let nextIndex = (currentTrackIndex + 1) % tracks.length;
         setCurrentTrackIndex(nextIndex);
         audioRef.current.src = tracks[nextIndex].src;
-        audioRef.current.play();
+        await audioRef.current.play();
         setIsPlaying(true);
     };
 
-    const prevTrack = () => {
+    const prevTrack = async () => {
         let prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
         setCurrentTrackIndex(prevIndex);
         audioRef.current.src = tracks[prevIndex].src;
-        audioRef.current.play();
+        await audioRef.current.play();
         setIsPlaying(true);
     };
 
