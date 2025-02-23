@@ -39,11 +39,9 @@ export default function AudioVisualizer() {
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.pause();
+            setIsPlaying(false)
             audioRef.current.src = tracks[currentTrackIndex].src;
             audioRef.current.load();
-            if (isPlaying) {
-                audioRef.current.play().catch(err => console.error("Ошибка воспроизведения:", err));
-            }
         }
     }, [currentTrackIndex]);
 
