@@ -46,9 +46,6 @@ const SphereVisualizer = ({ audioRef, startAudio }) => {
     useEffect(() => {
         if (startAudio) {
             audioCtx?.resume();
-            audioRef.play();
-        } else {
-            audioRef.pause();
         }
     }, [startAudio]);
 
