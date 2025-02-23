@@ -21,7 +21,7 @@ export default function AudioVisualizer() {
 
     useEffect(() => {
         audioRef.current = new Audio(tracks[currentTrackIndex].src);
-        audioRef.current.preload = "auto"; е
+        audioRef.current.preload = "auto";
         audioRef.current.addEventListener("timeupdate", () => {
             setCurrentTime(audioRef.current.currentTime);
             setDuration(audioRef.current.duration || 0);
