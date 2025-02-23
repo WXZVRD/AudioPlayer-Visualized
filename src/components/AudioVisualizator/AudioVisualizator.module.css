@@ -1,0 +1,105 @@
+.player{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+
+    width: 100%;
+    justify-content: space-between;
+}
+
+.player__nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prev__btn {
+    transition: transform 0.2s ease-in-out;
+}
+
+.prev__btn:hover {
+    transform: translateX(-5px);
+}
+
+.next__btn {
+    transition: transform 0.2s ease-in-out;
+}
+
+.next__btn:hover {
+    transform: translateX(5px);
+}
+
+.center__btn {
+    transition: transform 0.2s ease-in-out;
+}
+
+.center__btn:hover {
+    transform: translateY(-5px);
+}
+
+.player__nav-btn__img{
+    width: 30px;
+    height: 30px;
+}
+
+.canvas{
+    width: 500px;
+    height: 500px;
+}
+
+.player__descr_subheader{
+    color: #B0B0B0;
+    font-weight: 400;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.player__current_song{
+    display: block;
+    color: #fff;
+}
+
+.player__left{
+    display: flex;
+    flex-direction: column;
+    transform: perspective(500px) rotateY(30deg);
+}
+
+.player__right{
+    transform: perspective(500px) rotateY(-30deg);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.player__timer{
+    margin-bottom: 10px;
+}
+
+.canvas__container{
+    position: relative;
+}
+
+.canvas__smile {
+    position: absolute;
+    top: 240px;
+    left: 200px;
+    font-size: 20px;
+    white-space: nowrap;
+    animation: smileAnimation 6s infinite linear;
+}
+
+@keyframes smileAnimation {
+    0% { content: "(づ￣3￣)づ"; }
+    25% { content: "☜(￣ヮ￣☜)"; }
+    50% { content: "(づ￣3￣)づ"; }
+    75% { content: "☜(￣ヮ￣☜)"; }
+    100% { content: "(づ￣ 3￣)づ"; }
+}
+
+.canvas__smile::before {
+    content: "＼(￣︶￣* )";
+    display: inline-block;
+    animation: smileAnimation 4s infinite linear;
+}
+
+
