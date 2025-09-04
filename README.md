@@ -10,8 +10,6 @@
 
 ---
 
-## 🚀 Демонстрация / Demo
-
 ## 🎬 Демонстрация проекта / Project Demo
 
  ![Drag & Drop](./public/presentation.gif)
